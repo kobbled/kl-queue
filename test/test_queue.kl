@@ -1,0 +1,58 @@
+PROGRAM test_queue
+%NOLOCKGROUP
+
+--set path type
+%include systemlib.klt
+path_default_types
+
+
+%include kunit.klh
+
+%class tstque('queue.klc', 'queue.klh', 'default_queue.klt')
+
+ROUTINE t_push_pop : BOOLEAN
+  VAR
+    i : INTEGER
+    queue : ARRAY[10] OF INTEGER
+    exp_queue : ARRAY[10] OF INTEGER
+    b : ARRAY[2] OF BOOLEAN
+  BEGIN
+    tstque__init
+    
+    --enqueue
+    tstque__push(1)
+    tstque__push(3)
+    tstque__push(5)
+    tstque__push(4)
+    tstque__push(2)
+
+    --dequeue
+    FOR i=1 TO 5 DO
+      queue[i] = tstque__pop
+      tstque__push(ARRAY_LEN(queue) - i)
+    ENDFOR
+
+    b[1] = tstque__empty
+
+    FOR i=1 TO 5 DO
+      queue[i+5] = tstque__pop
+    ENDFOR
+
+    b[2] = tstque__empty
+
+    --expected
+    exp_queue[1] = 1 ; exp_queue[2] = 3 ; exp_queue[3] = 5 ;
+    exp_queue[4] = 4 ; exp_queue[5] = 2 ; exp_queue[6] = 9 ;
+    exp_queue[7] = 8 ; exp_queue[8] = 7 ; exp_queue[9] = 6 ;
+    exp_queue[10] = 5 ;
+
+
+    RETURN(kunit_eq_ari(exp_queue, queue) AND (NOT kunit_assert(b[1])) AND &
+           kunit_assert(b[2]) )
+
+  END t_push_pop
+
+BEGIN
+  kunit_test('push pop sequentially', t_push_pop) --asserts 3
+  kunit_done
+END test_queue

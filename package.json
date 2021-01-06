@@ -1,0 +1,20 @@
+{
+  "manver" : "1",
+  "project" : "queue",
+  "description" : "queue",
+  "version" : "0.0.1",
+  "license" : "Apache 2.0",
+  "author" : "kobbled",
+  "includes" : [
+    "include"
+  ],
+  "tests" : [
+    "test/test_queue.kl"
+  ],
+  "depends" : [
+    "errors",
+    "Strings",
+    "ktransw-macros",
+    "systemlib"
+  ]
+}

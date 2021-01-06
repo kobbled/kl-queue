@@ -1,0 +1,139 @@
+PROGRAM class_name
+%NOBUSYLAMP
+%COMMENT = 'queue object'
+%NOLOCKGROUP
+%NOPAUSE = COMMAND + TPENABLE + ERROR
+
+%include namespace.m
+
+-- declare type
+%include define_type.m
+
+%include errors.klt
+%include systemlib.klt
+path_default_types
+
+--print user defined struct
+%ifdef list_type_define
+list_type_define
+%endif
+
+VAR
+  data : PATH nodedata = QUEUETYPE
+
+%include errors.klh
+%from strings.klh %import i_to_s
+%include queue.klh
+%include queue.private.klh
+
+--private
+
+ROUTINE clear
+  VAR
+    i, status : INTEGER
+  BEGIN
+    i = PATH_LEN(data)
+    WHILE PATH_LEN(data) > 0 DO
+		  DELETE_NODE(data,i,status)
+      CHK_STAT(status)
+      i = i - 1
+	  ENDWHILE
+  END clear
+
+ROUTINE insert
+  VAR
+    i, status : INTEGER
+  BEGIN
+    IF (seq_no > PATH_LEN(data)) THEN
+      REPEAT
+        APPEND_NODE(data,status)
+        CHK_STAT(status)
+      UNTIL(PATH_LEN(data) = seq_no)
+    ENDIF
+
+    IF (NOT UNINIT(data[seq_no].v)) THEN
+      INSERT_NODE(data, seq_no, status)
+      CHK_STAT(status)
+    ENDIF
+
+    data[PATH_LEN(data)].v = val
+
+  END insert
+
+ROUTINE get
+  BEGIN
+
+    IF (PATH_LEN(data) = 0) THEN
+      karelError(QUEUE_IS_EMPTY,'queue is empty in class_name.', ER_ABORT)
+    ENDIF
+
+    IF (seq_no = 0) OR (seq_no > PATH_LEN(data)) THEN
+      karelError(QUEUE_BAD_SEQUENCE_NO,'bad sequence number in class_name.', ER_ABORT)
+    ENDIF
+
+    RETURN(data[seq_no].v)
+
+  END get
+
+-- public
+
+ROUTINE init
+  BEGIN
+    clear
+  END init
+
+ROUTINE push
+  BEGIN
+    insert(PATH_LEN(data) + 1, val)
+  END push
+
+ROUTINE pop
+  VAR
+    val : QUEUE_VAL_TYPE
+    status : INTEGER
+  BEGIN
+    -- get queue value
+    val = get(1)
+
+    --remove from array
+    DELETE_NODE(data,1,status)
+    CHK_STAT(status)
+
+    RETURN(val)
+  END pop
+
+ROUTINE copy
+  VAR
+    status : INTEGER
+  BEGIN
+    COPY_PATH(data, 0, 0, out_data, status)
+    CHK_STAT(status)
+  END copy
+
+ROUTINE empty
+  BEGIN
+    IF PATH_LEN(data) > 0 THEN
+      RETURN(FALSE)
+    ELSE
+      RETURN(TRUE)
+    ENDIF
+  END empty
+
+ROUTINE size
+  BEGIN
+    RETURN(PATH_LEN(data))
+  END size
+
+ROUTINE front
+  BEGIN
+    RETURN(data[1].v)
+  END front
+
+ROUTINE back
+  BEGIN
+    RETURN(data[PATH_LEN(data)].v)
+  END back
+
+
+BEGIN
+END class_name
