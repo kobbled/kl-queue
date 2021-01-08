@@ -14,8 +14,8 @@ PROGRAM class_name
 path_default_types
 
 --print user defined struct
-%ifdef list_type_define
-list_type_define
+%ifdef queue_type_define
+queue_type_define
 %endif
 
 VAR
@@ -51,12 +51,12 @@ ROUTINE insert
       UNTIL(PATH_LEN(data) = seq_no)
     ENDIF
 
-    IF (NOT UNINIT(data[seq_no].v)) THEN
+    IF (NOT UNINIT(data[seq_no].QUEUE_INDEX_NAME)) THEN
       INSERT_NODE(data, seq_no, status)
       CHK_STAT(status)
     ENDIF
 
-    data[PATH_LEN(data)].v = val
+    data[seq_no].QUEUE_INDEX_NAME = val
 
   END insert
 
@@ -71,7 +71,7 @@ ROUTINE get
       karelError(QUEUE_BAD_SEQUENCE_NO,'bad sequence number in class_name.', ER_ABORT)
     ENDIF
 
-    RETURN(data[seq_no].v)
+    RETURN(data[seq_no].QUEUE_INDEX_NAME)
 
   END get
 
@@ -89,7 +89,7 @@ ROUTINE push
 
 ROUTINE pop
   VAR
-    val : QUEUE_VAL_TYPE
+    val : QUEUE_INDEX_TYPE
     status : INTEGER
   BEGIN
     -- get queue value
@@ -126,12 +126,12 @@ ROUTINE size
 
 ROUTINE front
   BEGIN
-    RETURN(data[1].v)
+    RETURN(data[1].QUEUE_INDEX_NAME)
   END front
 
 ROUTINE back
   BEGIN
-    RETURN(data[PATH_LEN(data)].v)
+    RETURN(data[PATH_LEN(data)].QUEUE_INDEX_NAME)
   END back
 
 

@@ -5,8 +5,12 @@
   "version" : "0.0.1",
   "license" : "Apache 2.0",
   "author" : "kobbled",
+  "source" : [
+  ],
   "includes" : [
-    "include"
+    "include",
+    "include/priority",
+    "include/queue"
   ],
   "tests" : [
     "test/test_queue.kl"
