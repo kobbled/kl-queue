@@ -1,0 +1,12 @@
+%ifndef queue_private_h
+%define queue_private_h
+
+%include namespace.m
+declare_member(class_name,clear,class_name,clr)
+ROUTINE clear FROM class_name
+declare_member(class_name,insert,class_name,inst)
+ROUTINE insert(seq_no : INTEGER; val : QUEUETYPE) FROM class_name
+declare_member(class_name,get,class_name,get)
+ROUTINE get(seq_no : INTEGER) : QUEUE_INDEX_TYPE FROM class_name
+
+%endif --queue_private_h

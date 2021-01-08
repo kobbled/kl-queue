@@ -5,10 +5,19 @@ PROGRAM test_queue
 %include systemlib.klt
 path_default_types
 
+--set priority queue type
+%define class_name tprior
+%include default_priority.klt
+%ifdef queue_type_define
+queue_type_define
+%endif
 
 %include kunit.klh
 
+--queue
 %class tstque('queue.klc', 'queue.klh', 'default_queue.klt')
+--priority queue
+%class tprior('priority_queue.klc', 'priority_queue.klh', 'default_priority.klt')
 
 ROUTINE t_push_pop : BOOLEAN
   VAR
@@ -52,7 +61,54 @@ ROUTINE t_push_pop : BOOLEAN
 
   END t_push_pop
 
+ROUTINE t_priority : BOOLEAN
+  VAR
+    i : INTEGER
+    queue1, exp_queue1 : ARRAY[5] OF INTEGER
+    queue2, exp_queue2 : ARRAY[5] OF INTEGER
+  BEGIN
+    tprior__init
+
+    --test priority
+    --enqueue
+    tprior__push(1, 10)
+    tprior__push(3, 5)
+    tprior__push(5, 30)
+    tprior__push(4, 15)
+    tprior__push(2, 20)
+
+    --dequeue
+    FOR i=1 TO 5 DO
+      queue1[i] = tprior__pop
+    ENDFOR
+
+    --expected
+    exp_queue1[1] = 5 ; exp_queue1[2] = 2 ; exp_queue1[3] = 4 ;
+    exp_queue1[4] = 1 ; exp_queue1[5] = 3 ;
+
+    --test min priority
+    --enqueue
+    tprior__push(1, 1)
+    tprior__push(3, 15)
+    tprior__push(5, 10)
+    tprior__push(4, 5)
+    tprior__push(2, 20)
+
+    --dequeue
+    FOR i=1 TO 5 DO
+      queue2[i] = tprior__pop_min
+    ENDFOR
+
+    --expected
+    exp_queue2[1] = 1 ; exp_queue2[2] = 4 ; exp_queue2[3] = 5 ;
+    exp_queue2[4] = 3 ; exp_queue2[5] = 2 ;
+
+    RETURN(kunit_eq_ari(exp_queue1, queue1) AND kunit_eq_ari(exp_queue2, queue2))
+
+  END t_priority
+
 BEGIN
   kunit_test('push pop sequentially', t_push_pop) --asserts 3
+  kunit_test('priority queue', t_priority) --asserts 2
   kunit_done
 END test_queue

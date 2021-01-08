@@ -1,0 +1,16 @@
+%define QUEUETYPE t_queue
+%define QUEUE_INDEX_NAME v
+%define QUEUE_INDEX_TYPE INTEGER
+%define QUEUE_PRIORITY_NAME p
+%define QUEUE_PRIORITY_TYPE INTEGER
+
+--priority queue
+%mode push
+%mode string QQQ "`" "`" "\\"
+%define queue_type_define `TYPE
+  t_queue FROM class_name = STRUCTURE
+    QUEUE_INDEX_NAME : INTEGER --index
+    QUEUE_PRIORITY_NAME : INTEGER --priority
+  ENDSTRUCTURE
+  `
+%mode pop

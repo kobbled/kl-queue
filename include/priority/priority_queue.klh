@@ -1,0 +1,29 @@
+--header
+%include header_guard.m
+--oop
+%include namespace.m
+
+--start header file
+header_if -- ifndef class
+header_def -- define class
+
+declare_member(class_name,init,class_name,init)
+ROUTINE init FROM class_name
+declare_member(class_name,push,class_name,push)
+ROUTINE push(val : QUEUE_INDEX_TYPE; priority : QUEUE_PRIORITY_TYPE) FROM class_name
+declare_member(class_name,pop,class_name,pop)
+ROUTINE pop : QUEUE_INDEX_TYPE FROM class_name
+declare_member(class_name,pop_min,class_name,popm)
+ROUTINE pop_min : QUEUE_INDEX_TYPE FROM class_name
+declare_member(class_name,copy,class_name,copy)
+ROUTINE copy(out_data : PATH nodedata = QUEUETYPE) FROM class_name
+declare_member(class_name,empty,class_name,mpty)
+ROUTINE empty : BOOLEAN FROM class_name
+declare_member(class_name,size,class_name,size)
+ROUTINE size : INTEGER FROM class_name
+declare_member(class_name,front,class_name,frnt)
+ROUTINE front : QUEUE_INDEX_TYPE FROM class_name
+declare_member(class_name,back,class_name,back)
+ROUTINE back : QUEUE_INDEX_TYPE FROM class_name
+
+%endif --end header
