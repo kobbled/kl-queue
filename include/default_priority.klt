@@ -7,8 +7,8 @@
 --priority queue
 %mode push
 %mode string QQQ "`" "`" "\\"
-%define queue_type_define `TYPE
-  t_queue FROM class_name = STRUCTURE
+%define queue_type_define(parent) `TYPE
+  QUEUETYPE FROM parent = STRUCTURE
     QUEUE_INDEX_NAME : INTEGER --index
     QUEUE_PRIORITY_NAME : INTEGER --priority
   ENDSTRUCTURE

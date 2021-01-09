@@ -15,7 +15,7 @@ path_default_types
 
 --print user defined struct
 %ifdef queue_type_define
-queue_type_define
+queue_type_define(class_name)
 %endif
 
 VAR
