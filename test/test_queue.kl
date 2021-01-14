@@ -3,7 +3,6 @@ PROGRAM test_queue
 
 --set path type
 %include systemlib.klt
-path_default_types
 
 --set priority queue type
 %define class_name tprior

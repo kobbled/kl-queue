@@ -11,7 +11,6 @@ PROGRAM class_name
 
 %include errors.klt
 %include systemlib.klt
-path_default_types
 
 --print user defined struct
 %ifdef queue_type_define
