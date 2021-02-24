@@ -20,5 +20,8 @@
     "Strings",
     "ktransw-macros",
     "systemlib"
+  ],
+  "tests-depends" : [
+    "KUnit"
   ]
 }
