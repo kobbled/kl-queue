@@ -2,7 +2,7 @@ PROGRAM test_queue
 %NOLOCKGROUP
 
 --set path type
-%include systemlib.klt
+%include systemlib.types.klt
 
 --set priority queue type
 %define class_name tprior

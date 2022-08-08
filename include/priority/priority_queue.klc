@@ -10,7 +10,7 @@ PROGRAM class_name
 %include define_type.m
 
 %include errors.klt
-%include systemlib.klt
+%include systemlib.types.klt
 
 --print user defined struct
 %ifdef queue_type_define
